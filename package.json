@@ -1,5 +1,5 @@
 {
-  "name": "cyclic-socket",
+  "name": "main",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -9,8 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2",
-    "socket.io": "^4.7.2"
+    "express": "^4.18.2"
   },
   "devDependencies": {
     "eslint": "^8.47.0"
