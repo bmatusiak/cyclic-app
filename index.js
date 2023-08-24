@@ -3,7 +3,6 @@ var fs = require("fs");
 var express = require('express');
 var app = express();
 var server = require('http').createServer(app);
-var io = require('socket.io').listen(server);
 
 app.configure(function() {
     app.use(express.cookieParser("123321aassddccxxzz"));
@@ -13,10 +12,6 @@ app.configure(function() {
         key: 'express.sid'
     }));
     
-    io.configure(function() {
-        io.set("transports", ["xhr-polling"]);
-        io.set("polling duration", 10);
-    });
     server.listen(process.env.PORT || 8000, process.env.IP || "0.0.0.0");
 });
 
@@ -29,8 +24,3 @@ app.all('/', (req, res) => {
     });
 })
 
-
-io.sockets.on('connection', function(socket) {
-    socket;
-    console.log("socket.connection")
-});
