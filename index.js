@@ -7,7 +7,10 @@
 
     await setup();
 
-    app.all('/', (req, res) => {
+    app.get('/', (req, res) => {
+        res.set({
+            'content-type': 'application/html'
+        })
         fs.readFile(__dirname + "/index.html", function (err, data) {
 
             res.end(data.toString());
