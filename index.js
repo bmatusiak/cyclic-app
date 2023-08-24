@@ -9,7 +9,7 @@
 
     app.get('/', (req, res) => {
         res.set({
-            'content-type': 'application/html'
+            'content-type': 'text/html'
         })
         fs.readFile(__dirname + "/index.html", function (err, data) {
 
