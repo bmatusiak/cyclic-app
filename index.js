@@ -1,9 +1,10 @@
+var fs = require("fs");
+
 var express = require('express');
 var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
-var ejs = require("ejs");
-var fs = require("fs");
+
 app.configure(function() {
     app.use(express.cookieParser("123321aassddccxxzz"));
     app.use(express.bodyParser());
@@ -24,7 +25,7 @@ app.configure(function() {
 app.all('/', (req, res) => {
     fs.readFile(__dirname+"/index.html",function(err,data){
         
-        res.end(ejs.render(data.toString(),{}));
+        res.end(data.toString());
     });
 })
 
