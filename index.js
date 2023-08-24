@@ -1,23 +1,33 @@
-var fs = require("fs");
 
-var express = require('express');
-var app = express();
-var server = require('http').createServer(app);
-server.listen(process.env.PORT || 8000, process.env.IP || "0.0.0.0");
+(async function () {
+    var fs = require("fs");
+    var express = require('express');
+    var app = express();
+    var server = require('http').createServer(app);
 
-app.use(express.cookieParser("123321aassddccxxzz"));
-app.use(express.bodyParser());
-app.use(express.session({
-    secret: '123321aassddccxxzz',
-    key: 'express.sid'
-}));
+    await setup();
+
+    app.all('/', (req, res) => {
+        fs.readFile(__dirname + "/index.html", function (err, data) {
+
+            res.end(data.toString());
+        });
+    })
 
 
+    server.listen(process.env.PORT || 8000, process.env.IP || "0.0.0.0");
+
+    async function setup() {
+        var cookieParser = require('cookie-parser')
+        var session = require('express-session')
+
+        app.use(cookieParser("123321aassddccxxzz"));
+        app.use(session({
+            secret: '123321aassddccxxzz',
+            key: 'express.sid'
+        }));
+    }
 
 
-app.all('/', (req, res) => {
-    fs.readFile(__dirname+"/index.html",function(err,data){
-        
-        res.end(data.toString());
-    });
-})
+})();
+
