@@ -12,11 +12,9 @@
             'content-type': 'text/html'
         })
         fs.readFile(__dirname + "/index.html", function (err, data) {
-
             res.end(data.toString());
         });
     })
-
 
     server.listen(process.env.PORT || 8000, process.env.IP || "0.0.0.0");
 
