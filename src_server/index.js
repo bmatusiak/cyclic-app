@@ -1,8 +1,8 @@
 
-var WebAPI = require("./lib/express").WebAPI;
+var WebAPI = require("../lib/express").WebAPI;
 var s3 = require("./s3");
 
-module.exports = (function (express, app) {
+module.exports = function (express, app) {
 
 
     var api = new WebAPI(express);
@@ -19,4 +19,4 @@ module.exports = (function (express, app) {
 
     app.use("/api/v1", api.router)
 
-})();
+};
