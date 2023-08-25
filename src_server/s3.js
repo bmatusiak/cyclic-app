@@ -1,7 +1,7 @@
 
 module.exports = (function () {
 
-    const s3_bucket = process.env.AWS_BUCKET;
+    const s3_bucket = process.env.CYCLIC_BUCKET_NAME || process.env.AWS_BUCKET;
     const s3_region = process.env.AWS_REGION;
     
     const {
