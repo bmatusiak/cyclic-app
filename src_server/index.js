@@ -7,7 +7,7 @@ module.exports = function (express, app) {
 
     var api = new WebAPI(express);
 
-    api.on("/user", async function (req, res) {
+    api.on("/list", async function (req, res) {
 
         res.set({
             'content-type': 'application/json'
@@ -15,7 +15,7 @@ module.exports = function (express, app) {
         s3.listObjects((data) => { res.end(JSON.stringify(data)) })
         // data;
 
-    })
+    }) 
 
     app.use("/api/v1", api.router)
 
