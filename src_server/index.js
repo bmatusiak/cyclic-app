@@ -1,5 +1,5 @@
 
-var WebAPI = require("../lib/express").WebAPI;
+var WebAPI = require("./WebAPI");
 var s3 = require("./s3");
 
 module.exports = function (express, app) {

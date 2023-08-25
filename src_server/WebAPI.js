@@ -26,4 +26,4 @@
     }
 
 }
-module.exports = { WebAPI };
+module.exports = WebAPI;

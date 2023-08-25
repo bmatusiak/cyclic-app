@@ -31,4 +31,4 @@ export class WebAPI {
 
 }
 
-// module.export = WebAPI
+// module.export = { WebAPI }

@@ -1,7 +1,7 @@
 
 // window.location = "https://github.com/bmatusiak/cyclic-app";
 
-var WebAPI = require("../lib/fetch").WebAPI;
+var WebAPI = require("./WebAPI").WebAPI;
 
 (async function () {
 
