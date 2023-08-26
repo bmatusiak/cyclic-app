@@ -6,8 +6,8 @@ Gun.on('create', function (root) {
 	var opt = root.opt;
 	// if(opt.s3){
 		s3 = require('./s3');
-		opt.s3 = s3;
-		opt.rfs = false;
+		// opt.s3 = s3;
+		// opt.rfs = false;
 		opt.store = Store(opt);
 	// }
 
@@ -61,13 +61,14 @@ function Store(opt) {
 			}
 		}
 		
-		console.log("store.get",params);
 		s3.getObject(params, function got(err, ack) {
 			if (err && 'NoSuchKey' === err.Code) { err = u }
 			//console.log("RS3 GOT <----", err, file, cbs.length, ((ack||{}).Body||'').length);//.toString().slice(0,20));
 			delete c.g[file];//Gun.obj.del(c.g, file);
 
 			buildBody(ack,(data)=>{
+				params.Body = data
+				console.log("store.get",params);
 				var i = 0, cba = cbs[i++]; while (cba) { cba && cba(err, data); cba = cbs[i++] }//Gun.obj.map(cbs, cbe);
 			})
 

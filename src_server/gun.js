@@ -18,7 +18,7 @@
 	require('./DynamoDB');
 	// require('./myStore');
 	// require('./rs3');
-	// require('gun/lib/wire');
+	require('gun/lib/wire');
  
 	try{require('gun/sea');}catch(e){
         //
