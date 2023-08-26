@@ -28,7 +28,6 @@ describe('Test', function () {
 
         goingTo('set data', function (done) {
             api.put(testPath, testData, function(ack){
-                console.log(ack)
                 done();
             })
         });
