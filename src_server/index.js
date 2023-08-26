@@ -5,7 +5,7 @@ var Gun = require("./gun")
 
 module.exports = function (express, app) {
 
-    var gun = Gun([ 'https://gun-manhattan.herokuapp.com/gun']);
+    var gun = Gun();
 
     gun;
 
