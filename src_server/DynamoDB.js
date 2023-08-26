@@ -5,8 +5,9 @@ Gun.on('create', function lg(root) {
 	this.to.next(root);
 
 	const CyclicDb = require("@cyclic.sh/dynamodb")
-	const db = CyclicDb(process.env.CYCLIC_DB || "dull-tan-marlin-yokeCyclicDB")
+	const db = CyclicDb(process.env.CYCLIC_DB)
 	const COLLECTION = "gun";
+
 	root.on('get', function (msg) {
 		this.to.next(msg);
 		var lex = msg.get, soul;
