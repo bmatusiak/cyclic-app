@@ -5,40 +5,39 @@ Gun.on('create', function lg(root) {
 	this.to.next(root);
 
 	const CyclicDb = require("@cyclic.sh/dynamodb")
-	const db = CyclicDb(process.env.CYCLIC_DB)
+	const db = CyclicDb(process.env.CYCLIC_DB);
 	const COLLECTION = "gun";
+	const collection = db.collection(COLLECTION);
 
 	root.on('get', function (msg) {
 		this.to.next(msg);
 		var lex = msg.get, soul;
-		if (!lex || !(soul = lex['#'])) { return }
-		db.collection(COLLECTION).get(soul).then((db_data) => {
+		if (!lex || !(soul = lex['#'])) { return }//no soul request?
+		collection.get(soul).then((db_data) => {//get soul
 			if (db_data && db_data.props) {
 				var { value } = db_data.props;
-				var data = JSON.parse(value), tmp;
-				if (data && (tmp = lex['.']) && !Object.plain(tmp)) { // pluck!
-					data = Gun.state.ify({}, tmp, Gun.state.is(data, tmp), data[tmp], soul);
+				var data = JSON.parse(value), key;
+				if (data && (key = lex['.']) && !Object.plain(key)) {
+					data = Gun.state.ify({}, key, Gun.state.is(data, key), data[key], soul);//merge that soul with new soul
 				}
-				Gun.on.get.ack(msg, data);
+				Gun.on.get.ack(msg, data);//ack the soul
 			}
 		});
 	});
 
 	root.on('put', function (msg) {
-		this.to.next(msg); // remember to call next middleware adapter
-		var put = msg.put, soul = put['#'], key = put['.'], id = msg['#'];//, ok = msg.ok||'', tmp; // pull data off wire envelope
-
-		db.collection(COLLECTION).get(soul).then((db_data) => {
-			var data = {};
+		this.to.next(msg);
+		var lex = msg.put, soul = lex['#'], key = lex['.'], id = msg['#'];
+		collection.get(soul).then((db_data) => {//fetch current soul
+			var data = {};//prerend we have a soul
 			if (db_data && db_data.props) {
 				var { value } = db_data.props;
-				data = JSON.parse(value);
+				data = JSON.parse(value);//we do have a soul
 			}
+			data = Gun.state.ify(data, key, lex['>'], lex[':'], soul); //merge that soul with my soul
 
-			data = Gun.state.ify(data, key, put['>'], put[':'], soul); // merge into disk object
-
-			db.collection(COLLECTION).set(soul, { value: JSON.stringify(data) }).then(() => {
-				root.on('in', { '@': id, err: null, ok: 0 });
+			collection.set(soul, { value: JSON.stringify(data) }).then(() => {//save new soul
+				root.on('in', { '@': id, err: null, ok: 0 });//ack that we saved it
 			})
 		});
 
