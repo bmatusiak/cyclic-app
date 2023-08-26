@@ -1,7 +1,5 @@
 const CyclicDb = require("@cyclic.sh/dynamodb")
-const db = CyclicDb("dull-tan-marlin-yokeCyclicDB")
-
-
+const db = CyclicDb(process.env.CYCLIC_DB || "dull-tan-marlin-yokeCyclicDB")
 
 var Gun = require('gun/gun');
 
