@@ -6,7 +6,7 @@ Gun.on('create', function lg(root) {
 
 	const CyclicDb = require("@cyclic.sh/dynamodb")
 	const db = CyclicDb(process.env.CYCLIC_DB);
-	const COLLECTION = "gun";
+	const COLLECTION = "gun2";
 	const collection = db.collection(COLLECTION);
 
 	root.on('get', function (msg) {
@@ -14,14 +14,15 @@ Gun.on('create', function lg(root) {
 		var lex = msg.get, soul;
 		if (!lex || !(soul = lex['#'])) { return }//no soul request?
 		collection.get(soul).then((db_data) => {//get soul
+			var data;
 			if (db_data && db_data.props) {
-				var { value } = db_data.props;
-				var data = JSON.parse(value), key;
+				var { value } = db_data.props, key;
+				data = JSON.parse(value);
 				if (data && (key = lex['.']) && !Object.plain(key)) {
 					data = Gun.state.ify({}, key, Gun.state.is(data, key), data[key], soul);//merge that soul with new soul
 				}
-				Gun.on.get.ack(msg, data);//ack the soul
 			}
+			Gun.on.get.ack(msg, data);//ack the soul
 		});
 	});
 

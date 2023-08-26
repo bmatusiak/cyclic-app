@@ -2,42 +2,42 @@
 
 var assert = require('chai').assert;
 
-describe('API', function () {
+var goingTo = it;
 
-    var WebAPI = require("./WebAPI").WebAPI;
+describe('Test', function () {
 
-    var api;
+    var api  = require("./api").api("/api/v1");
+    console.log(api)
+    
+    goingTo('check if a random key has a null value ', function (done) {
+        api.get("hello/world+"+(new Date().getTime())+"/shouldBeNull", function(data){
+            assert.equal(data, null);
+            done();
+        })
+    });   
 
-    describe('setup', function () {
-        api = new WebAPI("/api/v1");
-        it('should be a object', function (done) {
-            assert.equal(typeof api, 'object');
+    describe('check if data can be set', function () {
+
+        var testPath, testData;
+
+        goingTo('set test path, and test data', function (done) {
+            testData = (new Date().getTime());
+            testPath = "hello/world-"+testData+"/testPath";
             done();
         });
+
+        goingTo('set data', function (done) {
+            api.put(testPath, testData, function(ack){
+                console.log(ack)
+                done();
+            })
+        });
+
+        goingTo('check data', function (done) {
+            api.get(testPath, function(data){
+                assert.equal(data, testData);
+                done();
+            })
+        });
     });
-
-    describe('set put', function () {
-
-        let sentData;
-
-        it('should be a string', function (done) {
-            var data = { some: "test-" + (new Date().getTime()) };
-            api.emit("/put", data, function (ack) {
-                if (ack == "OK") {
-                    sentData = JSON.stringify(data);
-                    assert.equal(typeof sentData, 'string');
-                    done();
-                }
-            })
-        });
-
-        describe('check put', function () {
-            it('should be a the same', function () {
-                api.emit("/get", {}, function (recData) {
-                    assert.equal(recData, sentData);
-                });
-            })
-        });
-    })
-
 });
