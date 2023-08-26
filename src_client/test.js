@@ -28,6 +28,7 @@ describe('Test', function () {
 
         goingTo('set data', function (done) {
             api.put(testPath, testData, function(ack){
+                assert.equal(ack.err, null);
                 done();
             })
         });
