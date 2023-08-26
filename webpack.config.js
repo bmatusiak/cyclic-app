@@ -19,6 +19,16 @@ module.exports = {
     plugins: [new HtmlWebpackPlugin({
         filename: './index.html',
         favicon: './public/favicon.ico',
-        template: './src_client/index.html'
+        template: './src_client/index.html',
+        inject: 'head'
     })],
+    module: {
+        rules: [
+            {
+                test: /test\.js$/,
+                use: 'mocha-loader',
+                exclude: /node_modules/,
+            },
+        ],
+    },
 };

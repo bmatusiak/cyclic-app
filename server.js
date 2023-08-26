@@ -10,10 +10,10 @@
 
     app.use(express.static('public'))
 
-    server.listen(process.env.PORT || 8000, process.env.IP || "0.0.0.0");
+    server.listen(process.env.PORT || 8080, process.env.IP || "0.0.0.0");
 
     console.log(process.env.CYCLIC_URL ||
-        ("http://" + (process.env.IP || "localhost") + ":" + (process.env.PORT || 8000)))
+        ("http://" + (process.env.IP || "localhost") + ":" + (process.env.PORT || 8080)))
 
 
 })();
