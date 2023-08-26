@@ -16,56 +16,65 @@ module.exports = (function () {
         AWS_REGION: s3_region
     });
 
-    async function listObjects(callback) {
+    async function listObjects(params, callback) {
         return new Promise(function (resolve, reject) {
-            const command = new ListObjectsCommand({ Bucket: s3_bucket });
+            const command = new ListObjectsCommand({...params, Bucket: s3_bucket });
             try {
                 client.send(command).then(function (data) {
-                    var keys = data.Contents.map((d) => d.Key);
-                    if (callback) callback(keys)
-                    resolve(keys)
+                    // var keys = data.Contents.map((d) => d.Key);
+                    if (callback) callback(null, data)
+                    resolve(data)
                 })
             } catch (error) {
-                reject(error)
+                reject(error);
+                callback(error);
             }
         });
     }
 
-    async function putObject(key, value, callback) {
+    async function putObject(params, callback) {
         return new Promise(function (resolve, reject) {
-            const command = new PutObjectCommand({ Bucket: s3_bucket, Key: key, Body: value });
+            const command = new PutObjectCommand({ ...params, Bucket: s3_bucket });
             try {
                 client.send(command).then(() => {
                     if (callback)
-                        callback("success");
+                        callback(null, "success");
                     resolve("success")
                 });
             } catch (error) {
-                reject(error)
+                reject(error);
+                callback(error);
             }
         });
     }
 
-    async function getObject(key, callback) {
-        var body = "";
-        return new Promise(function (resolve, reject) {
-            const command = new GetObjectCommand({ Bucket: s3_bucket, Key: key });
+    async function getObject(params, callback) {
+        // var body = "";
+        return new Promise(function (resolve) {
+            const command = new GetObjectCommand({ ...params, Bucket: s3_bucket });
             try {
                 client.send(command).then(function (data) {
-                    if (data.Body && callback) {
-                        data.Body.on('readable', function () {
-                            var s = data.Body.read();
-                            if (s)
-                                body += s;
-                        });
-                        data.Body.on('end', function () {
-                            callback(body)
-                            resolve(body)
-                        })
-                    }
-                });
+                    callback(null, data)
+                    resolve(data)
+                    // if (data.Body && callback) {
+                    //     data.Body.on('readable', function () {
+                    //         var s = data.Body.read();
+                    //         if (s)
+                    //             body += s;
+                    //     });
+                    //     data.Body.on('end', function () {
+                    //         callback(null, body)
+                    //         resolve(body)
+                    //     })
+                    // }
+                }).catch((error)=>{
+
+                    // reject(error);
+                    callback(error);
+                }).finally(()=>{});
             } catch (error) {
-                reject(error)
+                // reject(error);
+                callback(error);
             }
         });
     }
@@ -76,14 +85,18 @@ module.exports = (function () {
             try {
                 client.send(command).then(() => {
                     if (callback)
-                        callback("success");
+                        callback(null, "success");
                     resolve("success")
                 });
             } catch (error) {
-                reject(error)
+                reject(error);
+                callback(error);
             }
         });
     }
+
+    
+    // listObjects({}, (err, list) => console.log(list));
 
     return {
         listObjects,
